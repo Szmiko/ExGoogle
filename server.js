@@ -1,9 +1,9 @@
-var express = require('express');
-var passport = require('passport');
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var config = require('./config');
-var app = express();
-var googleProfile = {};
+const express = require('express');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const config = require('./config');
+const app = express();
+const googleProfile = {};
 
 app.set('view engine', 'pug');
 app.set('views', './views');
@@ -27,7 +27,8 @@ app.get('/auth/google/callback',
 	passport.authenticate('google', {
 		successRedirect: '/logged',
 		failureRedirect: '/'
-	}));
+	});
+);
 
 app.listen(3000);
 
@@ -35,19 +36,19 @@ passport.serializeUser(function(user, done) {
 	done(null, user);
 });
 passport.deserializeUser(function(obj,done) {
-	done(null,obj);
+	done(null, obj);
 });
 
 passport.use(new GoogleStrategy( {
 	clientID: config.GOOGLE_CLIENT_ID,
 	clientSecret: config.GOOGLE_CLIENT_SECRET,
 	callbackURL: config.CALLBACK_URL
-},
-	function(accessToken, refreshToken, profile, cb) {
-		googleProfile = {
-			id: profile.id,
-			displayName: profile.displayName
-		};
-		cb(null, profile);
-	}
-));
+};
+
+function(accessToken, refreshToken, profile, cb) {
+	googleProfile = {
+		id: profile.id,
+		displayName: profile.displayName
+	};
+	cb(null, profile);
+};
